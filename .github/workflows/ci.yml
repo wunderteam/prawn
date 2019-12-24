@@ -8,9 +8,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        edge:
-          - true
-          - false
         gemfile:
           - Gemfile
           - Gemfile.edge
