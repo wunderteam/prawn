@@ -5,10 +5,12 @@ on: push
 jobs:
   test:
     runs-on: ubuntu-latest
-    container: ${{matrix.image}}
     strategy:
       fail-fast: false
       matrix:
+        edge:
+          - true
+          - false
         gemfile:
           - Gemfile
           - Gemfile.edge
@@ -26,12 +28,14 @@ jobs:
             continue-on-error: true
           - gemfile: Gemfile.edge
             continue-on-error: true
+    container: ${{matrix.image}}
     steps:
       - uses: actions/checkout@v1
       - name: Set up Ruby
         run: |
           gem update --system > /dev/null
           gem --version
-          gem install -g ${{matrix.gemfile}}
+          gem i bundler
+          bundler install -gemfile=${{matrix.gemfile}}
       - name: Run tests
-        run: rake
+        run: bundler exec rake
