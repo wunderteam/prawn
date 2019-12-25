@@ -35,4 +35,6 @@ jobs:
           gem i bundler
           bundler install --gemfile=${{matrix.gemfile}}
       - name: Run tests
+        env:
+          BUNDLE_GEMFILE: ${{matrix.gemfile}}
         run: bundler exec rake
