@@ -1,0 +1,29 @@
+name: CI
+
+on: push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        gemfile:
+          - Gemfile
+          - Gemfile.edge
+    container: ruby:latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set up Ruby
+        run: |
+          gem update --system > /dev/null
+          gem --version
+          gem i bundler
+          bundler install --gemfile=${{matrix.gemfile}}
+      - name: Build manual
+        run: bundler exec rake manual
+      - name: Upload manula
+        uses: actions/upload-artifact@v1
+        with:
+          name: manual
+          path: manual.pdf
