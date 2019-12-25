@@ -3,7 +3,7 @@ name: Manual
 on: push
 
 jobs:
-  test:
+  Manual:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -15,12 +15,16 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Set up Ruby
+        env:
+          BUNDLE_GEMFILE: ${{matrix.gemfile}}
         run: |
           gem update --system > /dev/null
           gem --version
           gem i bundler
-          bundler install --gemfile=${{matrix.gemfile}}
+          bundler install
       - name: Build manual
+        env:
+          BUNDLE_GEMFILE: ${{matrix.gemfile}}
         run: bundler exec rake manual
       - name: Upload manula
         uses: actions/upload-artifact@v1
