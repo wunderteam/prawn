@@ -15,13 +15,11 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Set up Ruby
-        env:
-          BUNDLE_GEMFILE: ${{matrix.gemfile}}
         run: |
           gem update --system > /dev/null
           gem --version
           gem i bundler
-          bundler install
+          bundler install --gemfile=${{matrix.gemfile}}
       - name: Build manual
         env:
           BUNDLE_GEMFILE: ${{matrix.gemfile}}
