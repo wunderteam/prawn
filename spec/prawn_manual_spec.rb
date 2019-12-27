@@ -26,6 +26,7 @@ RSpec.describe Prawn do
 
       require File.expand_path(File.join(__dir__, %w[.. manual contents]))
       s = prawn_manual_document.render
+      File.write('test-manual.pdf', s)
 
       hash = Digest::SHA512.hexdigest(s)
 
