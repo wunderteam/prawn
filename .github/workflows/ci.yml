@@ -38,8 +38,15 @@ jobs:
         env:
           BUNDLE_GEMFILE: ${{matrix.gemfile}}
         run: bundler exec rake
-      - name: Upload manula
+      - name: Save manual
+        run: |
+          test -e manuals || mkdir manuals
+          mv test-manual.pdf manuals/manual-$(echo -n "${{matrix.image}}" | sed 's/:/-/')-${{matrix.gemfile}}.pdf
+  artifact:
+    needs: test
+    steps:
+      - name: Upload manuals
         uses: actions/upload-artifact@v1
         with:
           name: Manual
-          path: test-manual.pdf
+          path: manuals
