@@ -26,7 +26,14 @@ RSpec.describe Prawn do
 
       require File.expand_path(File.join(__dir__, %w[.. manual contents]))
       s = prawn_manual_document.render
-      File.write('test-manual.pdf', s)
+      File.binwrite('test-manual.pdf', s)
+
+      slice_length = 102_400
+      (s.length / slice_length.to_f).ceil.times do |slice_n|
+        slice_start = slice_n * slice_length
+        slice = s[slice_start, slice_length]
+        puts Digest::SHA256.hexdigest(slice)
+      end
 
       hash = Digest::SHA512.hexdigest(s)
 
