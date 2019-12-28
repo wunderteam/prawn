@@ -50,6 +50,7 @@ jobs:
         run: bundler exec rake
       - name: Upload manuals
         uses: actions/upload-artifact@v1
+        if: always()
         with:
           name: Manual (${{matrix.image.image}}-${{matrix.image.tag}}, ${{matrix.gemfile}})
           path: test-manual.pdf
