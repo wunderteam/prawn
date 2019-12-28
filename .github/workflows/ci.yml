@@ -12,20 +12,30 @@ jobs:
           - Gemfile
           - Gemfile.edge
         image:
-          - ruby:2.4.0
-          - ruby:2.4
-          - ruby:2.5.0
-          - ruby:2.5
-          - ruby:2.6.0
-          - ruby:2.6
-          - ruby:rc
-          - jruby:9.2
+          - image: ruby
+            tag: 2.4.0
+          - image: ruby
+            tag: "2.4"
+          - image: ruby
+            tag: 2.5.0
+          - image: ruby
+            tag: "2.5"
+          - image: ruby
+            tag: 2.6.0
+          - image: ruby
+            tag: "2.6"
+          - image: ruby
+            tag: rc
+          - image: jruby
+            tag: "9.2"
         include:
-          - image: ruby:rc
+          - image:
+              image: ruby
+              tag: rc
             continue-on-error: true
           - gemfile: Gemfile.edge
             continue-on-error: true
-    container: ${{matrix.image}}
+    container: ${{matrix.image.image}}:${{matrix.image.tag}}
     steps:
       - uses: actions/checkout@v1
       - name: Set up Ruby
@@ -41,5 +51,5 @@ jobs:
       - name: Upload manuals
         uses: actions/upload-artifact@v1
         with:
-          name: Manual (${{matrix.image}}, ${{matrix.gemfile}})
+          name: Manual (${{matrix.image.image}}-${{matrix.image.tag}}, ${{matrix.gemfile}})
           path: test-manual.pdf
